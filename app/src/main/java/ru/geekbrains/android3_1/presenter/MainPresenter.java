@@ -3,7 +3,6 @@ package ru.geekbrains.android3_1.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import ru.geekbrains.android3_1.R;
 import ru.geekbrains.android3_1.model.CounterModel;
 import ru.geekbrains.android3_1.view.MainView;
 
@@ -19,24 +18,21 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     @Override
     protected void onFirstViewAttach()
-    { 
+    {
         super.onFirstViewAttach();
     }
 
-    public void buttonClick(int id)
+    public void buttonClick(MainView.Buttons id)
     {
-        int value = -1;
+        final int value = model.calculate(id.ordinal());
         switch (id){
-            case R.id.btn_one:
-                value = model.calculate(0);
+            case ONE:
                 getViewState().setButtonOneText(value + "");
                 break;
-            case R.id.btn_two:
-                value = model.calculate(1);
+            case TWO:
                 getViewState().setButtonTwoText(value + "");
                 break;
-            case R.id.btn_three:
-                value = model.calculate(2);
+            case THREE:
                 getViewState().setButtonThreeText(value + "");
                 break;
         }
