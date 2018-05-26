@@ -3,17 +3,9 @@ package ru.geekbrains.android3_1.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.internal.schedulers.ComputationScheduler;
 import io.reactivex.schedulers.Schedulers;
-import kotlin.jvm.functions.Function0;
 import ru.geekbrains.android3_1.model.CounterModel;
 import ru.geekbrains.android3_1.view.MainView;
 import timber.log.Timber;
@@ -21,7 +13,7 @@ import timber.log.Timber;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView>
 {
-    CounterModel model;
+    final private CounterModel model;
 
     public MainPresenter(CounterModel model)
     {
@@ -37,24 +29,18 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     public void buttonClick(MainView.Buttons id)
     {
+        final Single<Integer> observe = model.calculateHard(id.ordinal())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread());
         switch (id){
             case ONE:
-                model.calculate(id.ordinal())
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( (n) -> getViewState().setButtonOneText(n.toString()));
+                observe.subscribe( (cnt) -> getViewState().setButtonOneText(cnt.toString()));
                 break;
             case TWO:
-                model.calculate(id.ordinal())
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( (n) -> getViewState().setButtonTwoText(n.toString()));
+                observe.subscribe( (cnt) -> getViewState().setButtonTwoText(cnt.toString()));
                 break;
             case THREE:
-                model.calculate(id.ordinal())
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( (n) -> getViewState().setButtonThreeText(n.toString()));
+                observe.subscribe( (cnt) -> getViewState().setButtonThreeText(cnt.toString()));
                 break;
         }
     }

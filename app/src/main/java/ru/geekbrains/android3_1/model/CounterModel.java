@@ -1,46 +1,39 @@
 package ru.geekbrains.android3_1.model;
 
-import android.icu.util.TimeUnit;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.functions.Function;
-
+import io.reactivex.Single;
+import timber.log.Timber;
 
 
 public class CounterModel
 {
-    List<Integer> counters;
-
-    Observable<Integer> cc;
+    final private CopyOnWriteArrayList<Integer> counters;
 
     public CounterModel()
     {
-
-        counters = new ArrayList<>();
+        counters = new CopyOnWriteArrayList<>();
         counters.add(0);
         counters.add(0);
         counters.add(0);
     }
 
+    public Single<Integer> calculateHard(int index) {
+        return Single.create(emitter -> {
+            try {
+                final long deep = (long)(Math.random() * 8.0);
+                Timber.v("Sleeping for %d", deep);
+                java.util.concurrent.TimeUnit.SECONDS.sleep(deep);
 
-    public Observable<Integer> calculate(int index) {
-        int value = counters.get(index) + 1;
-        counters.set(index, value);
-        return new Observable<Integer>() {
-            @Override
-            protected void subscribeActual(Observer observer) {
-                try {
-                    java.util.concurrent.TimeUnit.MILLISECONDS.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                observer.onNext(value);
+                Timber.v("Awaken after %d", deep);
+                final int value = counters.get(index) + 1;
+                counters.set(index, value);
+                emitter.onSuccess(value);
+
+            } catch (InterruptedException e) {
+                emitter.onError(e);
             }
-        };
+        });
     }
 
 }
