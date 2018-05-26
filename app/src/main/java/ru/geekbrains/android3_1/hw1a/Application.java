@@ -1,4 +1,4 @@
-package ru.geekbrains.android3_1;
+package ru.geekbrains.android3_1.hw1a;
 
 import timber.log.Timber;
 
