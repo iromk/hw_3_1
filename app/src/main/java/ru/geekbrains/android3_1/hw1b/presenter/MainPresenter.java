@@ -32,7 +32,7 @@ public class MainPresenter extends MvpPresenter<MainView>
         final Single<Integer> observe = model.calculateHard(id.ordinal())
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread());
-        switch (id){
+        switch (id) {
             case ONE:
                 observe.subscribe( (cnt) -> getViewState().setButtonOneText(cnt.toString()));
                 break;
