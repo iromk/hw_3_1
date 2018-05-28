@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3_1.R;
 import ru.geekbrains.android3_1.hw1b.model.CounterModel;
 import ru.geekbrains.android3_1.hw1b.presenter.MainPresenter;
@@ -49,7 +50,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @ProvidePresenter
     public  MainPresenter provideMainPresenter()
     {
-        return new MainPresenter(new CounterModel());
+        return new MainPresenter(new CounterModel(), AndroidSchedulers.mainThread());
     }
 
     @OnClick({R.id.btn_one, R.id.btn_two, R.id.btn_three})
