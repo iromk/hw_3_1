@@ -6,12 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3_1.R;
 
 /**
@@ -30,18 +28,19 @@ public class MainActivity extends AppCompatActivity implements BurgerBar {
         setContentView(R.layout.activity_main_2);
         ButterKnife.bind(this);
 
-        m = new Manager(this).manage();
+        m = new Manager(this, AndroidSchedulers.mainThread()).manage();
 
     }
 
     @OnClick(R.id.btn_open_door)
     public void onOpenDoor(View v) {
-        Observable.interval(5, TimeUnit.SECONDS).subscribe(m);
+        m.opensTheDoor();
         v.setEnabled(false);
     }
 
     @OnClick(R.id.btn_make_food)
     public void onMakeBurger() {
+
     }
 
 
