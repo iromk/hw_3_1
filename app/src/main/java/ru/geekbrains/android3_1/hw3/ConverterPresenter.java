@@ -6,7 +6,6 @@ import com.arellomobile.mvp.MvpPresenter;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -29,16 +28,14 @@ public class ConverterPresenter extends MvpPresenter<ConverterView> {
     public void convert(InputStream is, OutputStream os) {
 
         Timber.i(is.toString());
-        ImageConverter ic = ImageConverterFactory.create(ImageConverter.JPG_TO_PNG);
-        if(ic != null)
-            converterStream = Observable.fromCallable(
-                    () -> ic.jpgToPng(is, os))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(mainScheduler)
-                    .doOnDispose(() -> getViewState().reportOnCancel())
-                    .doOnComplete(() -> getViewState().reportOnSuccess())
-                    .doOnError(throwable -> getViewState().reportOnCancel())
-                    .subscribe();
+        getViewState().reportOnStart();
+        ImageConverter ic = ImageConverterFactory.create();
+        converterStream = ic.jpgToPng(is, os)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainScheduler)
+                .doOnDispose(() -> getViewState().reportOnCancel())
+                .doOnComplete(() -> getViewState().reportOnSuccess())
+                .subscribe();
     }
 
     @Override

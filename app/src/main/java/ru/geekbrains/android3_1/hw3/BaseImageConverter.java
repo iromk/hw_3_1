@@ -2,18 +2,12 @@ package ru.geekbrains.android3_1.hw3;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
+
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 /**
@@ -21,19 +15,21 @@ import timber.log.Timber;
  */
 class BaseImageConverter implements ImageConverter {
     @Override
-    public String jpgToPng(InputStream src, OutputStream dst) {
-        try {
-            Bitmap jpeg = BitmapFactory.decodeStream(src);
-            Timber.d(jpeg.toString());
-            jpeg.compress(Bitmap.CompressFormat.PNG, 100,
-                    dst);
-
-            Thread.sleep(2000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return dst.toString();
+    public Observable jpgToPng(InputStream src, OutputStream dst) {
+        return Observable.create(emitter -> {
+            try {
+                Bitmap jpeg = BitmapFactory.decodeStream(src);
+                Timber.d(jpeg.toString());
+                Thread.sleep(3333);
+                jpeg.compress(Bitmap.CompressFormat.PNG, 100, dst);
+                emitter.onComplete();
+            } catch (InterruptedException e) {
+                Timber.i("Just awaken from sleep");
+            } finally {
+                src.close();
+                dst.close();
+            }
+        });
     }
 
 

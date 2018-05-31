@@ -8,11 +8,8 @@ import io.reactivex.annotations.Nullable;
 public class ImageConverterFactory {
 
     @Nullable
-    public static ImageConverter create(int type) {
-        if(type == ImageConverter.JPG_TO_PNG) {
-            return new BaseImageConverter();
-        }
-        return null;
+    public static ImageConverter create() {
+        return new BaseImageConverter();
     }
 
 }

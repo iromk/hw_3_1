@@ -7,6 +7,7 @@ import com.arellomobile.mvp.MvpView;
  */
 public interface ConverterView extends MvpView {
 
+    void reportOnStart();
     void reportOnSuccess();
     void reportOnProblem();
     void reportOnCancel();
