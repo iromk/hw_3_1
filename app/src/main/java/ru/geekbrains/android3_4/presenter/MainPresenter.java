@@ -38,6 +38,7 @@ public class MainPresenter extends MvpPresenter<MainView>
     protected void onFirstViewAttach()
     {
         super.onFirstViewAttach();
+        getViewState().initReposList();
         loadData();
     }
 
@@ -57,7 +58,6 @@ public class MainPresenter extends MvpPresenter<MainView>
                             .subscribe(repos -> {
                                 gitReposList.clear();
                                 gitReposList.addAll(repos);
-                                getViewState().initReposList();
                                 getViewState().updateReposList();
                     }, throwable -> Timber.e(throwable, "Failed to list repos"));
 
