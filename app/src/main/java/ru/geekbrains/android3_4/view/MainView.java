@@ -8,6 +8,5 @@ public interface MainView extends MvpView
     void loadImage(String url);
 
     void initReposList();
-
     void updateReposList();
 }

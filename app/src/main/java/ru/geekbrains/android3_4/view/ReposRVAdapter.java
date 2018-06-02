@@ -17,7 +17,7 @@ import ru.geekbrains.android3_4.presenter.IReposPresenter;
 /**
  * Created by Roman Syrchin on 6/2/18.
  */
-class ReposRVAdapter extends Adapter<ReposRVAdapter.ViewHolder> {
+class ReposRVAdapter extends Adapter<ReposRVAdapter.RepoCardViewHolder> {
 
     private IReposPresenter reposPresenter;
 
@@ -27,14 +27,13 @@ class ReposRVAdapter extends Adapter<ReposRVAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_repo_item, parent, false));
+    public RepoCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new RepoCardViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_repo_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        holder.setRepoNameTextView(reposPresenter.getRepoName(position));
+    public void onBindViewHolder(@NonNull RepoCardViewHolder holder, int position) {
+        reposPresenter.representCardView(holder, position);
     }
 
     @Override
@@ -42,16 +41,17 @@ class ReposRVAdapter extends Adapter<ReposRVAdapter.ViewHolder> {
         return reposPresenter.getReposCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class RepoCardViewHolder extends RecyclerView.ViewHolder implements RepoCardView {
 
         @BindView(R.id.tv_repo_name)
         TextView repoNameTextView;
 
-        public ViewHolder(View itemView) {
+        public RepoCardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void setRepoNameTextView(String text) { repoNameTextView.setText(text); }
+        @Override
+        public void setRepoName(String text) { repoNameTextView.setText(text); }
     }
 }

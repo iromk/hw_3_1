@@ -16,6 +16,7 @@ import okhttp3.Request;
 import ru.geekbrains.android3_4.model.entity.GitRepo;
 import ru.geekbrains.android3_4.model.repo.UsersRepo;
 import ru.geekbrains.android3_4.view.MainView;
+import ru.geekbrains.android3_4.view.RepoCardView;
 import timber.log.Timber;
 
 @InjectViewState
@@ -91,6 +92,11 @@ public class MainPresenter extends MvpPresenter<MainView>
         @Override
         public String getRepoName(int position) {
             return gitReposList.get(position).getName();
+        }
+
+        @Override
+        public void representCardView(RepoCardView repoCardView, int position) {
+            repoCardView.setRepoName(reposPresenter.getRepoName(position));
         }
     }
 }
