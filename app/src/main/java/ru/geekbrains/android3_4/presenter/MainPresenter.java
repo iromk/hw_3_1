@@ -91,13 +91,19 @@ public class MainPresenter extends MvpPresenter<MainView>
         }
 
         @Override
-        public String getRepoName(int position) {
-            return gitReposList.get(position).getName();
+        public GitRepo getRepo(int position) {
+            return gitReposList.get(position);
         }
 
         @Override
         public void representCardView(RepoCardView repoCardView, int position) {
-            repoCardView.setRepoName(reposPresenter.getRepoName(position));
+            final GitRepo repo = reposPresenter.getRepo(position);
+
+            repoCardView.setRepoName(repo.getName());
+
+            if(repo.isFork()) repoCardView.setFork();
+            if(repo.isPrivate()) repoCardView.setPrivate();
+            if(repo.isStarred()) repoCardView.setStarred();
         }
     }
 }

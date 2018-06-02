@@ -46,12 +46,38 @@ class ReposRVAdapter extends Adapter<ReposRVAdapter.RepoCardViewHolder> {
         @BindView(R.id.tv_repo_name)
         TextView repoNameTextView;
 
+        @BindView(R.id.tv_ic_star)
+        TextView repoIconStar;
+
+        @BindView(R.id.tv_ic_private)
+        TextView repoIconPrivate;
+
+        @BindView(R.id.tv_ic_forked)
+        TextView repoIconFork;
+
         public RepoCardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         @Override
-        public void setRepoName(String text) { repoNameTextView.setText(text); }
+        public void setRepoName(String text) {
+            repoNameTextView.setText(text);
+        }
+
+        @Override
+        public void setFork() {
+            repoIconFork.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_fork,  0);
+        }
+
+        @Override
+        public void setPrivate() {
+            repoIconPrivate.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_private, 0);
+        }
+
+        @Override
+        public void setStarred() {
+            repoIconStar.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_star, 0);
+        }
     }
 }

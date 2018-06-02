@@ -11,11 +11,19 @@ public class GitRepo {
 
     @Expose String name;
     @Expose String fullName;
-    @Expose @SerializedName("private") boolean isPrivate;
+    @Expose @SerializedName("private") boolean privateFlag;
+    @Expose boolean fork;
+    private boolean starred = false;
+
 
     public String getName() { return name; }
 
     public String getFullName() { return fullName; }
 
-    public boolean isPrivate() { return isPrivate; }
+    public boolean isPrivate() { return privateFlag; }
+
+    public boolean isFork() { return fork; }
+
+    public boolean isStarred() { return starred; }
+    public void setStarred() { starred = true; }
 }

@@ -1,5 +1,6 @@
 package ru.geekbrains.android3_4.presenter;
 
+import ru.geekbrains.android3_4.model.entity.GitRepo;
 import ru.geekbrains.android3_4.view.RepoCardView;
 
 /**
@@ -8,6 +9,6 @@ import ru.geekbrains.android3_4.view.RepoCardView;
 public interface IReposPresenter {
 
     int getReposCount();
-    String getRepoName(int position);
+    GitRepo getRepo(int position);
     void representCardView(RepoCardView repoCardView, int position);
 }

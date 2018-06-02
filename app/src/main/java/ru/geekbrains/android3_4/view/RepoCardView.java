@@ -6,5 +6,8 @@ package ru.geekbrains.android3_4.view;
 public interface RepoCardView {
 
     void setRepoName(String text);
+    void setFork();
+    void setPrivate();
+    void setStarred();
 
 }
