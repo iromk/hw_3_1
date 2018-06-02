@@ -1,11 +1,11 @@
 package ru.geekbrains.android3_4.presenter;
 
 import android.annotation.SuppressLint;
-import android.widget.ListView;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Scheduler;
@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import ru.geekbrains.android3_4.model.entity.GitRepo;
-import ru.geekbrains.android3_4.model.repo.UsersRepo;
+import ru.geekbrains.android3_4.model.repo.GithubRepo;
 import ru.geekbrains.android3_4.view.MainView;
 import ru.geekbrains.android3_4.view.RepoCardView;
 import timber.log.Timber;
@@ -22,14 +22,16 @@ import timber.log.Timber;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView>
 {
-    Scheduler mainThreadScheduler;
-    UsersRepo usersRepo;
-    private ReposPresenter reposPresenter = new ReposPresenter();
+    final private Scheduler mainThreadScheduler;
+    final private GithubRepo githubRepo;
+    final private ReposPresenter reposPresenter = new ReposPresenter();
+    final private List<GitRepo> gitReposList = new ArrayList<>();
+
 
     public MainPresenter(Scheduler mainThreadScheduler)
     {
         this.mainThreadScheduler = mainThreadScheduler;
-        usersRepo = new UsersRepo();
+        githubRepo = new GithubRepo();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     @SuppressLint("CheckResult")
     private void loadData(){
-        usersRepo.getUser("iromk")
+        githubRepo.getUser("iromk")
                 .subscribeOn(Schedulers.io())
                 .observeOn(mainThreadScheduler)
                 .subscribe(user -> {
@@ -49,19 +51,18 @@ public class MainPresenter extends MvpPresenter<MainView>
                     getViewState().setUsernameText(user.getLogin());
                     getViewState().loadImage(user.getAvatarUrl());
 
-                    usersRepo.getGitRepos(user)
+                    githubRepo.getGitRepos(user)
                             .subscribeOn(Schedulers.io())
                             .observeOn(mainThreadScheduler)
                             .subscribe(repos -> {
-                                gitReposList = repos;
+                                gitReposList.clear();
+                                gitReposList.addAll(repos);
                                 getViewState().initReposList();
                                 getViewState().updateReposList();
-                    });
+                    }, throwable -> Timber.e(throwable, "Failed to list repos"));
 
                 }, throwable -> Timber.e(throwable, "Failed to get user"));
     }
-
-    private List<GitRepo> gitReposList;
 
     private void getDataViaOkHttp()
     {

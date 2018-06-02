@@ -8,7 +8,7 @@ import ru.geekbrains.android3_4.model.api.ApiHolder;
 import ru.geekbrains.android3_4.model.entity.GitRepo;
 import ru.geekbrains.android3_4.model.entity.User;
 
-public class UsersRepo
+public class GithubRepo
 {
     public Observable<User> getUser(String username)
     {
