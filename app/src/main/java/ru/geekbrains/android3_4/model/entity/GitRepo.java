@@ -13,4 +13,9 @@ public class GitRepo {
     @Expose String fullName;
     @Expose @SerializedName("private") boolean isPrivate;
 
+    public String getName() { return name; }
+
+    public String getFullName() { return fullName; }
+
+    public boolean isPrivate() { return isPrivate; }
 }

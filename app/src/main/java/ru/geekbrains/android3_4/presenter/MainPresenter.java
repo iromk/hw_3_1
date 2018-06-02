@@ -35,19 +35,23 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     @SuppressLint("CheckResult")
     private void loadData(){
-        usersRepo.getUser("AntonZarytski")
+        usersRepo.getUser("iromk")
+//        usersRepo.getUser("AntonZarytski")
                 .subscribeOn(Schedulers.io())
                 .observeOn(mainThreadScheduler)
                 .subscribe(user -> {
 
                     //TODO: получить и отобразить список репозиториев пользователя
 
-                    getViewState().setUsernameText(user.getReposUrl());
                     getViewState().setUsernameText(user.getLogin());
                     getViewState().loadImage(user.getAvatarUrl());
-                }, throwable -> {
-                    Timber.e(throwable, "Failed to get user");
-                });
+
+                    usersRepo.getGitRepos(user)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(mainThreadScheduler)
+                            .subscribe(repos -> getViewState().setUsernameText(repos.get(0).getName()));
+
+                }, throwable -> Timber.e(throwable, "Failed to get user"));
     }
 
     private void getDataViaOkHttp()
