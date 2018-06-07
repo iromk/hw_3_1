@@ -10,6 +10,7 @@ import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.entity.GithubUser;
 import ru.geekbrains.android3_4.model.utils.NetworkStatus;
 import ru.geekbrains.android3_4.model.utils.Utils;
+import timber.log.Timber;
 
 /**
  * Created by Roman Syrchin on 6/7/18.
@@ -18,17 +19,18 @@ import ru.geekbrains.android3_4.model.utils.Utils;
 
 public class PaperCache implements GithubCache
 {
-
     private static final String BOOK_USERS = "users";
 
     @Override
     public Observable<GithubUser> fetchUser(String username) {
-        if(!Paper.book(BOOK_USERS).contains(username))
-        {
-            return Observable.error(new RuntimeException("No such user in cache: " + username));
-        }
-
-        return Observable.fromCallable(() -> Paper.book(BOOK_USERS).read(username));
+        return Observable.create(emitter -> {
+            if(!Paper.book(BOOK_USERS).contains(username))
+            {
+                emitter.onError(new RuntimeException("No such user in cache: " + username));
+            }
+            emitter.onNext(Paper.book(BOOK_USERS).read(username));
+            emitter.onComplete();
+        });
     }
 
     @Override
@@ -38,13 +40,16 @@ public class PaperCache implements GithubCache
 
     @Override
     public Observable<List<GithubRepository>> fetchRepositories(GithubUser user) {
-        String md5 = Utils.MD5(user.getReposUrl());
-        if(!Paper.book("repos").contains(md5))
-        {
-            return Observable.error(new RuntimeException("No repos for such url: " + user.getReposUrl()));
-        }
-
-        return Observable.fromCallable(() -> Paper.book("repos").read(md5));
+        return Observable.create(emitter -> {
+            Timber.v("fetchRepositories");
+            String md5 = Utils.MD5(user.getReposUrl());
+            if(!Paper.book("repos").contains(md5))
+            {
+                emitter.onError(new RuntimeException("No repos for such url: " + user.getReposUrl()));
+            }
+            emitter.onNext(Paper.book("repos").read(md5));
+            emitter.onComplete();
+        });
     }
 
     @Override
