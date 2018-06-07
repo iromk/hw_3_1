@@ -9,12 +9,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class GithubRepository {
 
+    @Expose String id;
     @Expose String name;
     @Expose String fullName;
     @Expose @SerializedName("private") boolean privateFlag;
     @Expose boolean fork;
     private boolean starred = false;
 
+    public GithubRepository(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() { return name; }
 

@@ -3,6 +3,7 @@ package ru.geekbrains.android3_4;
 import android.app.Application;
 
 import io.paperdb.Paper;
+import io.realm.Realm;
 import timber.log.Timber;
 
 public class App extends Application
@@ -16,6 +17,7 @@ public class App extends Application
         instance = this;
         Timber.plant(new Timber.DebugTree());
         Paper.init(this);
+        Realm.init(this);
     }
 
     public static App getInstance() {
