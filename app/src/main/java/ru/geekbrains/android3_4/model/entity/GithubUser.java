@@ -2,7 +2,7 @@ package ru.geekbrains.android3_4.model.entity;
 
 import com.google.gson.annotations.Expose;
 
-public class User
+public class GithubUser
 {
     @Expose String avatarUrl;
     @Expose String login;

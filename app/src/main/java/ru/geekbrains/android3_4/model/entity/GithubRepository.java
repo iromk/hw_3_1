@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Roman Syrchin on 6/2/18.
  */
 
-public class GitRepo {
+public class GithubRepository {
 
     @Expose String name;
     @Expose String fullName;
