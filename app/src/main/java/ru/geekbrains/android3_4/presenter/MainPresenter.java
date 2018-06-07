@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.repo.GithubRepo;
+import ru.geekbrains.android3_4.model.repo.cache.AACache;
 import ru.geekbrains.android3_4.model.repo.cache.PaperCache;
 import ru.geekbrains.android3_4.model.repo.cache.RealmCache;
 import ru.geekbrains.android3_4.view.MainView;
@@ -34,7 +35,8 @@ public class MainPresenter extends MvpPresenter<MainView>
     {
         this.mainThreadScheduler = mainThreadScheduler;
         githubRepo = new GithubRepo(
-                new RealmCache()
+                new AACache()
+//                new RealmCache()
 //                new PaperCache()
         );
     }

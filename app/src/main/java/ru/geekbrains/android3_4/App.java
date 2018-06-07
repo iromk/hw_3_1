@@ -3,9 +3,12 @@ package ru.geekbrains.android3_4;
 import android.app.Application;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 
 import io.paperdb.Paper;
 import io.realm.Realm;
+import ru.geekbrains.android3_4.model.entity.aa.AARepository;
+import ru.geekbrains.android3_4.model.entity.aa.AAUser;
 import timber.log.Timber;
 
 public class App extends Application
