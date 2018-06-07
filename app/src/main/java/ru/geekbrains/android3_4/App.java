@@ -2,6 +2,8 @@ package ru.geekbrains.android3_4;
 
 import android.app.Application;
 
+import com.activeandroid.ActiveAndroid;
+
 import io.paperdb.Paper;
 import io.realm.Realm;
 import timber.log.Timber;
@@ -18,6 +20,7 @@ public class App extends Application
         Timber.plant(new Timber.DebugTree());
         Paper.init(this);
         Realm.init(this);
+        ActiveAndroid.initialize(this);
     }
 
     public static App getInstance() {
