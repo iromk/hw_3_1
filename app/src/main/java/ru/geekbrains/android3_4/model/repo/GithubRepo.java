@@ -13,7 +13,11 @@ import ru.geekbrains.android3_4.model.repo.cache.PaperCache;
 
 public class GithubRepo
 {
-    GithubCache cache = new PaperCache();
+    private GithubCache cache;
+
+    public GithubRepo(GithubCache cache) {
+        this.cache = cache;
+    }
 
     public Observable<GithubUser> getUser(String username)
     {
