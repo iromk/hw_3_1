@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 
+import ru.geekbrains.android3_4.App;
+
 public class NetworkStatus
 {
     private static final String TAG = "NetworkStatus";
