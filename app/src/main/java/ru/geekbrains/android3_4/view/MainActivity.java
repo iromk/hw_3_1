@@ -3,6 +3,7 @@ package ru.geekbrains.android3_4.view;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,10 +17,8 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3_4.R;
 import ru.geekbrains.android3_4.model.image.IImageLoader;
-import ru.geekbrains.android3_4.model.image.android.GlideImageLoader;
 import ru.geekbrains.android3_4.model.image.android.PicassoImageLoader;
 import ru.geekbrains.android3_4.presenter.MainPresenter;
-import android.support.v7.widget.RecyclerView;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView
 {
@@ -44,7 +43,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        imageLoader = new PicassoImageLoader();
+        imageLoader =
+                new PicassoImageLoader();
+//                new GlideImageLoader();
     }
 
     @ProvidePresenter

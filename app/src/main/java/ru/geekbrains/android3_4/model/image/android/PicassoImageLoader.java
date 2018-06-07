@@ -11,6 +11,6 @@ public class PicassoImageLoader implements IImageLoader<ImageView>
     @Override
     public void loadInto(String url, ImageView container)
     {
-        Picasso.get().load(url).into(container);
+        Picasso.get().load("file:"+url).into(container);
     }
 }

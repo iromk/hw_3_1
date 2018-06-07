@@ -16,8 +16,6 @@ import okhttp3.Request;
 import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.repo.GithubRepo;
 import ru.geekbrains.android3_4.model.repo.cache.AACache;
-import ru.geekbrains.android3_4.model.repo.cache.PaperCache;
-import ru.geekbrains.android3_4.model.repo.cache.RealmCache;
 import ru.geekbrains.android3_4.view.MainView;
 import ru.geekbrains.android3_4.view.RepoCardView;
 import timber.log.Timber;
@@ -59,7 +57,13 @@ public class MainPresenter extends MvpPresenter<MainView>
 
                     Timber.v("getUser.subscribe");
                     getViewState().setUsernameText(user.getLogin());
-                    getViewState().loadImage(user.getAvatarUrl());
+                    githubRepo.getAvatarCachedUrl(user.getAvatarUrl())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(mainThreadScheduler)
+                            .subscribe(url -> {
+                                Timber.v("image (%s)", url);
+                                getViewState().loadImage(url);
+                            });
 
                     githubRepo.getGitRepos(user).singleElement()
                             .subscribeOn(Schedulers.io())
