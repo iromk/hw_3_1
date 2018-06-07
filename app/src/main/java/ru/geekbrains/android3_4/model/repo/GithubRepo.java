@@ -15,9 +15,6 @@ public class GithubRepo
 {
     GithubCache cache = new PaperCache();
 
-
-
-
     public Observable<GithubUser> getUser(String username)
     {
         return ApiHolder.getApi().getUser(username)
@@ -25,12 +22,17 @@ public class GithubRepo
                 .map(user -> {
                     cache.keep(user);
                     return user; })
-                .onErrorResumeNext(cache.fetch(username));
+                .onErrorResumeNext(cache.fetchUser(username));
     }
 
     public Observable<List<GithubRepository>> getGitRepos(GithubUser user)
     {
-        return ApiHolder.getApi().getGitRepos(user.getLogin());
+        return ApiHolder.getApi().getGitRepos(user.getLogin())
+                .subscribeOn(Schedulers.io())
+                .map(repositories -> {
+                    cache.keep(repositories, user);
+                    return repositories; })
+                .onErrorResumeNext(cache.fetchRepositories(user));
     }
 
 

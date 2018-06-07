@@ -11,9 +11,9 @@ import ru.geekbrains.android3_4.model.entity.GithubUser;
  */
 public interface GithubCache {
 
-    Observable<GithubUser> fetch(String username);
+    Observable<GithubUser> fetchUser(String username);
     void keep(GithubUser user);
 
-    Observable<List<GithubRepository>> fetch(GithubUser user);
+    Observable<List<GithubRepository>> fetchRepositories(GithubUser user);
     void keep(List<GithubRepository> gitrepos, GithubUser user);
 }
