@@ -9,4 +9,6 @@ public interface MainView extends MvpView
 
     void initReposList();
     void updateReposList();
+
+    void showError(CharSequence errorText);
 }

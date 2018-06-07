@@ -1,7 +1,9 @@
 package ru.geekbrains.android3_4.view;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,5 +75,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @Override
     public void updateReposList() {
         gitReposAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showError(CharSequence errorText) {
+        Snackbar.make(avatarImageView, errorText, Snackbar.LENGTH_INDEFINITE)
+                .setAction("gotcha", (View v) -> {})
+                .show();
     }
 }

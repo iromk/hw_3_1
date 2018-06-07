@@ -13,7 +13,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import ru.geekbrains.android3_4.model.entity.GitRepo;
+import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.repo.GithubRepo;
 import ru.geekbrains.android3_4.view.MainView;
 import ru.geekbrains.android3_4.view.RepoCardView;
@@ -25,7 +25,7 @@ public class MainPresenter extends MvpPresenter<MainView>
     final private Scheduler mainThreadScheduler;
     final private GithubRepo githubRepo;
     final private ReposPresenter reposPresenter = new ReposPresenter();
-    final private List<GitRepo> gitReposList = new ArrayList<>();
+    final private List<GithubRepository> gitReposList = new ArrayList<>();
 
 
     public MainPresenter(Scheduler mainThreadScheduler)
@@ -49,6 +49,7 @@ public class MainPresenter extends MvpPresenter<MainView>
                 .observeOn(mainThreadScheduler)
                 .subscribe(user -> {
 
+                    Timber.v("getUser.subscribe");
                     getViewState().setUsernameText(user.getLogin());
                     getViewState().loadImage(user.getAvatarUrl());
 
@@ -59,9 +60,13 @@ public class MainPresenter extends MvpPresenter<MainView>
                                 gitReposList.clear();
                                 gitReposList.addAll(repos);
                                 getViewState().updateReposList();
-                    }, throwable -> Timber.e(throwable, "Failed to list repos"));
+                    }, throwable -> {
+                                getViewState().showError("Network problem and cache missed requested data");
+                                Timber.e(throwable, "Failed to list repos");});
 
-                }, throwable -> Timber.e(throwable, "Failed to get user"));
+                }, throwable -> {
+                    getViewState().showError("Network problem and cache missed requested data");
+                    Timber.e(throwable, "Failed to get user");});
     }
 
     private void getDataViaOkHttp()
@@ -91,13 +96,13 @@ public class MainPresenter extends MvpPresenter<MainView>
         }
 
         @Override
-        public GitRepo getRepo(int position) {
+        public GithubRepository getRepo(int position) {
             return gitReposList.get(position);
         }
 
         @Override
         public void representCardView(RepoCardView repoCardView, int position) {
-            final GitRepo repo = reposPresenter.getRepo(position);
+            final GithubRepository repo = reposPresenter.getRepo(position);
 
             repoCardView.setRepoName(repo.getName());
 
