@@ -16,6 +16,7 @@ import okhttp3.Request;
 import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.repo.GithubRepo;
 import ru.geekbrains.android3_4.model.repo.cache.PaperCache;
+import ru.geekbrains.android3_4.model.repo.cache.RealmCache;
 import ru.geekbrains.android3_4.view.MainView;
 import ru.geekbrains.android3_4.view.RepoCardView;
 import timber.log.Timber;
@@ -32,7 +33,10 @@ public class MainPresenter extends MvpPresenter<MainView>
     public MainPresenter(Scheduler mainThreadScheduler)
     {
         this.mainThreadScheduler = mainThreadScheduler;
-        githubRepo = new GithubRepo(new PaperCache());
+        githubRepo = new GithubRepo(
+                new RealmCache()
+//                new PaperCache()
+        );
     }
 
     @Override
@@ -48,25 +52,27 @@ public class MainPresenter extends MvpPresenter<MainView>
         githubRepo.getUser("iromk")
                 .subscribeOn(Schedulers.io())
                 .observeOn(mainThreadScheduler)
+                .singleElement()
                 .subscribe(user -> {
 
                     Timber.v("getUser.subscribe");
                     getViewState().setUsernameText(user.getLogin());
                     getViewState().loadImage(user.getAvatarUrl());
 
-                    githubRepo.getGitRepos(user)
+                    githubRepo.getGitRepos(user).singleElement()
                             .subscribeOn(Schedulers.io())
                             .observeOn(mainThreadScheduler)
                             .subscribe(repos -> {
+                                Timber.v("getGitRepos.subscribe");
                                 gitReposList.clear();
                                 gitReposList.addAll(repos);
                                 getViewState().updateReposList();
                     }, throwable -> {
-                                getViewState().showError("Network problem and cache missed requested data");
+                                getViewState().showError("Network problem and cache missed requested data while getting repositories.");
                                 Timber.e(throwable, "Failed to list repos");});
 
                 }, throwable -> {
-                    getViewState().showError("Network problem and cache missed requested data");
+                    getViewState().showError("Network problem and cache missed requested data while getting user.");
                     Timber.e(throwable, "Failed to get user");});
     }
 
