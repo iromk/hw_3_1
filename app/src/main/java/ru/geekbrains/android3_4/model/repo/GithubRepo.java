@@ -10,6 +10,7 @@ import ru.geekbrains.android3_4.model.entity.GithubRepository;
 import ru.geekbrains.android3_4.model.entity.GithubUser;
 import ru.geekbrains.android3_4.model.repo.cache.GithubCache;
 import ru.geekbrains.android3_4.model.repo.cache.PaperCache;
+import timber.log.Timber;
 
 public class GithubRepo
 {
@@ -31,9 +32,11 @@ public class GithubRepo
 
     public Observable<List<GithubRepository>> getGitRepos(GithubUser user)
     {
+        Timber.v("getGitRepos %s", user.getLogin());
         return ApiHolder.getApi().getGitRepos(user.getLogin())
                 .subscribeOn(Schedulers.io())
                 .map(repositories -> {
+                    Timber.v("got repositories");
                     cache.keep(repositories, user);
                     return repositories; })
                 .onErrorResumeNext(cache.fetchRepositories(user));

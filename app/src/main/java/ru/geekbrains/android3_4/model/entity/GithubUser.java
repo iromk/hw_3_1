@@ -4,9 +4,15 @@ import com.google.gson.annotations.Expose;
 
 public class GithubUser
 {
-    @Expose String avatarUrl;
     @Expose String login;
+    @Expose String avatarUrl;
     @Expose String reposUrl;
+
+    public GithubUser(String login, String avatarUrl, String reposUrl) {
+        this.login = login;
+        this.avatarUrl = avatarUrl;
+        this.reposUrl = reposUrl;
+    }
 
     public String getAvatarUrl()
     {
