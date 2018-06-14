@@ -13,6 +13,7 @@ import ru.geekbrains.android3.model.api.ApiService;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.cache.GithubCache;
+import ru.geekbrains.android3.model.utils.NetworkStatus;
 import timber.log.Timber;
 
 public class GithubRepo
@@ -20,21 +21,26 @@ public class GithubRepo
     @Inject GithubCache cache;
     @Inject ApiService apiService;
 
-    public Maybe<GithubUser> getUser(String username)
+    public Observable<GithubUser> getUser(String username)
     {
-        return ApiHolder.getApi().getUser(username)
+        if(NetworkStatus.isOffline())
+            return cache.fetchUser(username);
+        else
+            return ApiHolder.getApi().getUser(username)
                 .subscribeOn(Schedulers.io())
                 .map(user -> {
                     cache.keep(user);
                     return user; })
-                .onErrorResumeNext(cache.fetchUser(username))
-                .singleElement();
+                .onErrorResumeNext(cache.fetchUser(username));
     }
 
     public Observable<List<GithubRepository>> getGitRepos(GithubUser user)
     {
         Timber.v("getGitRepos %s", user.getLogin());
-        return ApiHolder.getApi().getGitRepos(user.getLogin())
+        if(NetworkStatus.isOffline())
+            return cache.fetchRepositories(user);
+        else
+            return ApiHolder.getApi().getGitRepos(user.getLogin())
                 .subscribeOn(Schedulers.io())
                 .map(repositories -> {
                     Timber.v("got repositories");
