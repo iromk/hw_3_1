@@ -10,6 +10,7 @@ import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.entity.realm.RealmRepository;
 import ru.geekbrains.android3.model.entity.realm.RealmUser;
+import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import timber.log.Timber;
 
 /**

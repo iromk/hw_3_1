@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -20,18 +22,15 @@ import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.cache.GithubCache;
 import ru.geekbrains.android3.model.repo.cache.PaperCache;
+import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import ru.geekbrains.android3.model.utils.Utils;
 import timber.log.Timber;
 
 public class GithubRepo
 {
-    private GithubCache cache;
-    private ApiService apiService;
-
-    public GithubRepo(GithubCache cache, ApiService apiService) {
-        this.cache = cache;
-        this.apiService = apiService;
-    }
+    @Inject GithubCache cache;
+    @Inject ImageCache imageCache;
+    @Inject ApiService apiService;
 
     public Observable<GithubUser> getUser(String username)
     {
