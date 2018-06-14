@@ -10,6 +10,7 @@ import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.model.image.ImageLoader;
 import ru.geekbrains.android3.model.image.android.PicassoImageLoader;
 import ru.geekbrains.android3.model.repo.ImageRepo;
+import ru.geekbrains.android3.model.repo.cache.image.AAImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.NoImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.PaperImageCache;
@@ -25,7 +26,7 @@ import ru.geekbrains.android3.model.repo.cache.image.ZeroImageCache;
 public class ImageRepoModule {
 
     @Provides
-    public ImageRepo imageRepo(@UseImageCache ImageCache imageCache, ImageLoader<ImageView> imageLoader) {
+    public ImageRepo imageRepo(@UseImageCache("AA") ImageCache imageCache, ImageLoader<ImageView> imageLoader) {
         return new ImageRepo(imageCache, imageLoader);
     }
 
@@ -37,6 +38,11 @@ public class ImageRepoModule {
     @Provides @UseImageCache("Paper")
     public ImageCache papirusOptimus() {
         return new PaperImageCache();
+    }
+
+    @Provides @UseImageCache("AA")
+    public ImageCache aaCache() {
+        return new AAImageCache();
     }
 
     @Provides @NoImageCache

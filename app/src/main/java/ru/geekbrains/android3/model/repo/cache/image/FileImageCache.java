@@ -36,9 +36,17 @@ abstract class FileImageCache {
     @Nullable
     private File getCacheDir() {
         final File cacheDir = new File(getCachePath());
-        if(!cacheDir.exists() && cacheDir.mkdirs())
+        if(cacheDir.exists() || cacheDir.mkdirs())
             return cacheDir;
         else return null;
+    }
+
+    String getFilePath(String filename) {
+        final File cacheBitmap = new File(getCacheDir(), filename.concat(".PNG"));
+        if(cacheBitmap.exists())
+            return cacheBitmap.toString();
+        else
+            return null;
     }
 
     private String getCachePath() {

@@ -4,6 +4,7 @@ package ru.geekbrains.android3;
 import com.activeandroid.Configuration;
 import com.activeandroid.content.ContentProvider;
 
+import ru.geekbrains.android3.model.entity.aa.AACachedImage;
 import ru.geekbrains.android3.model.entity.aa.AARepository;
 import ru.geekbrains.android3.model.entity.aa.AAUser;
 
@@ -18,6 +19,7 @@ public class DatabaseContentProvider extends ContentProvider {
         Configuration.Builder builder = new Configuration.Builder(getContext());
         builder.addModelClass(AAUser.class);
         builder.addModelClass(AARepository.class);
+        builder.addModelClass(AACachedImage.class);
         return builder.create();
     }
 }
