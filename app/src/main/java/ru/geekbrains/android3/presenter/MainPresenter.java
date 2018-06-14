@@ -17,7 +17,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.repo.GithubRepo;
-import ru.geekbrains.android3.model.repo.cache.AACache;
 import ru.geekbrains.android3.view.MainView;
 import ru.geekbrains.android3.view.RepoCardView;
 import timber.log.Timber;
@@ -34,11 +33,6 @@ public class MainPresenter extends MvpPresenter<MainView>
     public MainPresenter(Scheduler mainThreadScheduler)
     {
         this.mainThreadScheduler = mainThreadScheduler;
-//        githubRepo = new GithubRepo(
-//                new AACache()
-////                new RealmCache()
-////                new PaperCache()
-//        );
     }
 
     @Override
@@ -52,30 +46,20 @@ public class MainPresenter extends MvpPresenter<MainView>
     @SuppressLint("CheckResult")
     private void loadData(){
         githubRepo.getUser("iromk")
-                .subscribeOn(Schedulers.io())
                 .observeOn(mainThreadScheduler)
-                .singleElement()
                 .subscribe(user -> {
 
-                    Timber.v("getUser.subscribe");
                     getViewState().setUsernameText(user.getLogin());
-                    githubRepo.getAvatarCachedUrl(user.getAvatarUrl())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(mainThreadScheduler)
-                            .subscribe(url -> {
-                                Timber.v("image (%s)", url);
-                                getViewState().loadImage(url);
-                            });
+                    getViewState().loadImage(user.getAvatarUrl());
 
                     githubRepo.getGitRepos(user).singleElement()
-                            .subscribeOn(Schedulers.io())
                             .observeOn(mainThreadScheduler)
                             .subscribe(repos -> {
                                 Timber.v("getGitRepos.subscribe");
                                 gitReposList.clear();
                                 gitReposList.addAll(repos);
                                 getViewState().updateReposList();
-                    }, throwable -> {
+                            }, throwable -> {
                                 getViewState().showError("Network problem and cache missed requested data while getting repositories.");
                                 Timber.e(throwable, "Failed to list repos");});
 
