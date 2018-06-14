@@ -2,20 +2,18 @@ package ru.geekbrains.android3.di.modules;
 
 import android.widget.ImageView;
 
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.model.image.ImageLoader;
-import ru.geekbrains.android3.model.image.android.PicassoImageLoader;
+import ru.geekbrains.android3.model.image.android.GlideImageLoader;
 import ru.geekbrains.android3.model.repo.ImageRepo;
 import ru.geekbrains.android3.model.repo.cache.image.AAImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.NoImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.PaperImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.RealmImageCache;
-import ru.geekbrains.android3.model.repo.cache.image.UseImageCache;
+import ru.geekbrains.android3.model.repo.cache.image.UseCache;
 import ru.geekbrains.android3.model.repo.cache.image.ZeroImageCache;
 
 /**
@@ -26,21 +24,23 @@ import ru.geekbrains.android3.model.repo.cache.image.ZeroImageCache;
 public class ImageRepoModule {
 
     @Provides
-    public ImageRepo imageRepo(@UseImageCache("AA") ImageCache imageCache, ImageLoader<ImageView> imageLoader) {
-        return new ImageRepo(imageCache, imageLoader);
+    public ImageRepo imageRepo() {
+        ImageRepo imageRepo = new ImageRepo();
+        App.getInstance().getAppComponent().inject(imageRepo);
+        return imageRepo;
     }
 
-    @Provides @UseImageCache
+    @Provides @UseCache
     public ImageCache realmImageCache() {
         return new RealmImageCache();
     }
 
-    @Provides @UseImageCache("Paper")
+    @Provides @UseCache("Paper")
     public ImageCache papirusOptimus() {
         return new PaperImageCache();
     }
 
-    @Provides @UseImageCache("AA")
+    @Provides @UseCache("AA")
     public ImageCache aaCache() {
         return new AAImageCache();
     }
@@ -52,6 +52,6 @@ public class ImageRepoModule {
 
     @Provides
     public ImageLoader<ImageView> imageLoader() {
-        return new PicassoImageLoader();
+        return new GlideImageLoader();
     }
 }

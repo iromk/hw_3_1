@@ -19,8 +19,6 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.R;
-import ru.geekbrains.android3.model.image.ImageLoader;
-import ru.geekbrains.android3.model.image.android.PicassoImageLoader;
 import ru.geekbrains.android3.model.repo.ImageRepo;
 import ru.geekbrains.android3.presenter.MainPresenter;
 
@@ -39,9 +37,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
 
     @Inject ImageRepo imageRepo;
 
-//    @Inject App app;
-
-//    ImageLoader<ImageView> imageLoader;
     private ReposRVAdapter gitReposAdapter;
 
     @Override
@@ -52,10 +47,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
         ButterKnife.bind(this);
 
         App.getInstance().getAppComponent().inject(this);
-
-//        imageLoader =
-//                new PicassoImageLoader();
-//                new GlideImageLoader();
     }
 
     @ProvidePresenter
