@@ -1,4 +1,4 @@
-package ru.geekbrains.android3.model.repo.cache.image;
+package ru.geekbrains.android3.model.repo.cache;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import ru.geekbrains.android3.model.image.ImageLoader;
 import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
-import ru.geekbrains.android3.model.repo.cache.image.UseCache;
+import ru.geekbrains.android3.model.repo.cache.UseCache;
 
 /**
  * Created by Roman Syrchin on 6/14/18.

@@ -8,7 +8,7 @@ import ru.geekbrains.android3.model.repo.cache.AACache;
 import ru.geekbrains.android3.model.repo.cache.GithubCache;
 import ru.geekbrains.android3.model.repo.cache.PaperCache;
 import ru.geekbrains.android3.model.repo.cache.RealmCache;
-import ru.geekbrains.android3.model.repo.cache.image.UseCache;
+import ru.geekbrains.android3.model.repo.cache.UseCache;
 
 @Module(includes = {ApiModule.class, CacheModule.class, ImageRepoModule.class})
 public class RepoModule

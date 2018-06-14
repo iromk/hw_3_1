@@ -13,7 +13,7 @@ import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.NoImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.PaperImageCache;
 import ru.geekbrains.android3.model.repo.cache.image.RealmImageCache;
-import ru.geekbrains.android3.model.repo.cache.image.UseCache;
+import ru.geekbrains.android3.model.repo.cache.UseCache;
 import ru.geekbrains.android3.model.repo.cache.image.ZeroImageCache;
 
 /**
