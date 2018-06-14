@@ -1,58 +1,36 @@
 package ru.geekbrains.android3.model.repo.cache.image;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import io.realm.Realm;
-import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.model.entity.realm.CachedImage;
-import ru.geekbrains.android3.model.utils.Utils;
 import timber.log.Timber;
 
 /**
  * Created by Roman Syrchin on 6/14/18.
  */
-public class RealmImageCache implements ImageCache {
+public class RealmImageCache extends FileImageCache implements ImageCache {
 
     @Override
     public void keep(String url, Bitmap bitmap) {
-        final File cacheDir = getCacheDir();
-        final File cacheBitmap = new File(cacheDir, Utils.MD5(url) + ".png");
-        try {
-            FileOutputStream fos = new FileOutputStream(cacheBitmap);
-            bitmap.compress(Bitmap.CompressFormat.PNG,
-                    100,
-                    fos);
-            fos.close();
+        final String key = makeKey(url);
+        final File cachedBitmap = saveImageToFile(bitmap, key);
 
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-
-        Timber.v(cacheBitmap.toString());
+        Timber.v(cachedBitmap.toString());
         Realm.getDefaultInstance().executeTransactionAsync(realm ->
         {
             CachedImage cachedImage = new CachedImage();
             cachedImage.setUrl(url);
-            cachedImage.setPath(cacheBitmap.toString());
+            cachedImage.setPath(cachedBitmap.toString());
             realm.copyToRealm(cachedImage);
         });
     }
 
-    @NonNull
-    private File getCacheDir() {
-        final File cacheDir = new File(getCachePath());
-        if(!cacheDir.exists()) cacheDir.mkdir();
-        return cacheDir;
-    }
-
-    private String getCachePath() {
-        return App.getInstance().getApplicationContext().getCacheDir()
-                .getAbsolutePath().concat("/github");
+    @Override
+    String getCacheName() {
+        return "realm";
     }
 
     @Override
