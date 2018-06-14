@@ -5,7 +5,7 @@ import dagger.Provides;
 import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.model.repo.GithubRepo;
 
-@Module(includes = {ApiModule.class, CacheModule.class})
+@Module(includes = {ApiModule.class, CacheModule.class, ImageRepoModule.class})
 public class RepoModule
 {
     @Provides

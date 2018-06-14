@@ -13,8 +13,13 @@ import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
  */
 public class ImageRepo {
 
-    @Inject ImageCache imageCache;
-    @Inject ImageLoader<ImageView> imageLoader;
+    ImageCache imageCache;
+    ImageLoader<ImageView> imageLoader;
+
+    public ImageRepo(ImageCache imageCache, ImageLoader<ImageView> imageLoader) {
+        this.imageCache = imageCache;
+        this.imageLoader = imageLoader;
+    }
 
     @SuppressLint("CheckResult")
     public void loadInto(String url, ImageView imageView) {
