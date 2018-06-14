@@ -9,6 +9,7 @@ import io.paperdb.Paper;
 import io.realm.Realm;
 import ru.geekbrains.android3.di.AppComponent;
 import ru.geekbrains.android3.di.DaggerAppComponent;
+import ru.geekbrains.android3.di.modules.AppModule;
 import ru.geekbrains.android3.model.entity.aa.AARepository;
 import ru.geekbrains.android3.model.entity.aa.AAUser;
 import timber.log.Timber;
@@ -30,7 +31,7 @@ public class App extends Application
         ActiveAndroid.initialize(this);
 
         appComponent = DaggerAppComponent.builder()
-//                .appModule()
+//                .appModule(new AppModule(this))
                 .build();
     }
 
@@ -38,4 +39,7 @@ public class App extends Application
         return instance;
     }
 
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
 }

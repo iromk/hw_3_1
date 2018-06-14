@@ -15,6 +15,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.model.api.ApiHolder;
+import ru.geekbrains.android3.model.api.ApiService;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.cache.GithubCache;
@@ -25,9 +26,11 @@ import timber.log.Timber;
 public class GithubRepo
 {
     private GithubCache cache;
+    private ApiService apiService;
 
-    public GithubRepo(GithubCache cache) {
+    public GithubRepo(GithubCache cache, ApiService apiService) {
         this.cache = cache;
+        this.apiService = apiService;
     }
 
     public Observable<GithubUser> getUser(String username)

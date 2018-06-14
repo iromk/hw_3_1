@@ -12,9 +12,12 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.R;
 import ru.geekbrains.android3.model.image.IImageLoader;
 import ru.geekbrains.android3.model.image.android.PicassoImageLoader;
@@ -31,8 +34,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @BindView(R.id.rv_repos)
     RecyclerView reposRecyclerView;
 
-    @InjectPresenter
-    MainPresenter presenter;
+    @InjectPresenter MainPresenter presenter;
+
+//    @Inject App app;
 
     IImageLoader<ImageView> imageLoader;
     private ReposRVAdapter gitReposAdapter;
@@ -43,6 +47,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+//        App.getInstance().getAppComponent().inject(this);
+
         imageLoader =
                 new PicassoImageLoader();
 //                new GlideImageLoader();
@@ -51,7 +58,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
     @ProvidePresenter
     public MainPresenter provideMainPresenter()
     {
-        return new MainPresenter(AndroidSchedulers.mainThread());
+        MainPresenter presenter = new MainPresenter(AndroidSchedulers.mainThread());
+        App.getInstance().getAppComponent().inject(presenter);
+        return presenter;
     }
 
     @Override

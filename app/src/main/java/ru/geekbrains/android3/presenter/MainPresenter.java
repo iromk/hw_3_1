@@ -8,6 +8,8 @@ import com.arellomobile.mvp.MvpPresenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -24,7 +26,7 @@ import timber.log.Timber;
 public class MainPresenter extends MvpPresenter<MainView>
 {
     final private Scheduler mainThreadScheduler;
-    final private GithubRepo githubRepo;
+    @Inject GithubRepo githubRepo;
     final private ReposPresenter reposPresenter = new ReposPresenter();
     final private List<GithubRepository> gitReposList = new ArrayList<>();
 
@@ -32,11 +34,11 @@ public class MainPresenter extends MvpPresenter<MainView>
     public MainPresenter(Scheduler mainThreadScheduler)
     {
         this.mainThreadScheduler = mainThreadScheduler;
-        githubRepo = new GithubRepo(
-                new AACache()
-//                new RealmCache()
-//                new PaperCache()
-        );
+//        githubRepo = new GithubRepo(
+//                new AACache()
+////                new RealmCache()
+////                new PaperCache()
+//        );
     }
 
     @Override
