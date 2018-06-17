@@ -1,4 +1,4 @@
-package ru.geekbrains.android3_1
+package ru.geekbrains.android3
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
