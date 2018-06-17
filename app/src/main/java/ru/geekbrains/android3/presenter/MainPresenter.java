@@ -41,7 +41,6 @@ public class MainPresenter extends MvpPresenter<MainView>
     {
         super.onFirstViewAttach();
         getViewState().initReposList();
-        loadData();
     }
 
     @SuppressLint("CheckResult")
@@ -87,6 +86,10 @@ public class MainPresenter extends MvpPresenter<MainView>
 
     public ReposPresenter getReposPresenter() {
         return reposPresenter;
+    }
+
+    public void onPermissionsGranted() {
+        loadData();
     }
 
     private class ReposPresenter implements IReposPresenter {
