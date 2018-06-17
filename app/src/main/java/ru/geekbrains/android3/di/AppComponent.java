@@ -17,6 +17,4 @@ public interface AppComponent
 {
     void inject(MainActivity activity);
     void inject(MainPresenter presenter);
-    void inject(GithubRepo githubRepo);
-    void inject(ImageRepo imageRepo);
 }

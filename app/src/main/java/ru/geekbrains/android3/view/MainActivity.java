@@ -20,6 +20,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3.App;
 import ru.geekbrains.android3.R;
 import ru.geekbrains.android3.model.repo.ImageRepo;
+import ru.geekbrains.android3.model.repo.cache.UseCache;
+import ru.geekbrains.android3.model.repo.cache.image.NoImageCache;
 import ru.geekbrains.android3.presenter.MainPresenter;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView
@@ -35,7 +37,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView
 
     @InjectPresenter MainPresenter presenter;
 
-    @Inject ImageRepo imageRepo;
+    @Inject @UseCache("Paper") ImageRepo imageRepo;
 
     private ReposRVAdapter gitReposAdapter;
 

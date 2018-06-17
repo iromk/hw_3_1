@@ -3,8 +3,6 @@ package ru.geekbrains.android3.model.repo;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import ru.geekbrains.android3.model.api.ApiHolder;
@@ -18,18 +16,20 @@ import timber.log.Timber;
 
 public class GithubRepo
 {
-    @UseCache("AA")
-//    @UseCache("Paper")
-//    @UseCache
-    @Inject GithubCache cache;
-    @Inject ApiService apiService;
+    private GithubCache cache;
+    private ApiService apiService;
+
+    public GithubRepo(GithubCache cache, ApiService apiService) {
+        this.cache = cache;
+        this.apiService = apiService;
+    }
 
     public Observable<GithubUser> getUser(String username)
     {
         if(NetworkStatus.isOffline())
             return cache.fetchUser(username);
         else
-            return ApiHolder.getApi().getUser(username)
+            return apiService.getUser(username)
                 .subscribeOn(Schedulers.io())
                 .map(user -> {
                     cache.keep(user);
@@ -43,7 +43,7 @@ public class GithubRepo
         if(NetworkStatus.isOffline())
             return cache.fetchRepositories(user);
         else
-            return ApiHolder.getApi().getGitRepos(user.getLogin())
+            return apiService.getGitRepos(user.getLogin())
                 .subscribeOn(Schedulers.io())
                 .map(repositories -> {
                     Timber.v("got repositories");

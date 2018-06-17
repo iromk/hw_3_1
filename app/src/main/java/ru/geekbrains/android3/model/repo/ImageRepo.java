@@ -3,23 +3,21 @@ package ru.geekbrains.android3.model.repo;
 import android.annotation.SuppressLint;
 import android.widget.ImageView;
 
-import javax.inject.Inject;
-
 import ru.geekbrains.android3.model.image.ImageLoader;
 import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
-import ru.geekbrains.android3.model.repo.cache.UseCache;
 
 /**
  * Created by Roman Syrchin on 6/14/18.
  */
 public class ImageRepo {
 
-//    @UseCache("AA")
-//    @UseCache("Paper")
-    @UseCache
-//    @NoImageCache
-    @Inject ImageCache imageCache;
-    @Inject ImageLoader<ImageView> imageLoader;
+    private ImageCache imageCache;
+    private ImageLoader<ImageView> imageLoader;
+
+    public ImageRepo(ImageCache imageCache, ImageLoader<ImageView> imageLoader) {
+        this.imageCache = imageCache;
+        this.imageLoader = imageLoader;
+    }
 
     @SuppressLint("CheckResult")
     public void loadInto(String url, ImageView imageView) {

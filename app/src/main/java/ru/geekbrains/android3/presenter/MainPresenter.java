@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.repo.GithubRepo;
+import ru.geekbrains.android3.model.repo.cache.UseCache;
 import ru.geekbrains.android3.view.MainView;
 import ru.geekbrains.android3.view.RepoCardView;
 import timber.log.Timber;
@@ -25,7 +26,7 @@ import timber.log.Timber;
 public class MainPresenter extends MvpPresenter<MainView>
 {
     final private Scheduler mainThreadScheduler;
-    @Inject GithubRepo githubRepo;
+    @Inject @UseCache("AA") GithubRepo githubRepo;
     final private ReposPresenter reposPresenter = new ReposPresenter();
     final private List<GithubRepository> gitReposList = new ArrayList<>();
 
