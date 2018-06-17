@@ -4,11 +4,8 @@ import java.util.List;
 
 import io.paperdb.Paper;
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
-import ru.geekbrains.android3.model.api.ApiHolder;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
-import ru.geekbrains.android3.model.utils.NetworkStatus;
 import ru.geekbrains.android3.model.utils.Utils;
 import timber.log.Timber;
 

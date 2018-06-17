@@ -5,12 +5,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
-import ru.geekbrains.android3.model.api.ApiHolder;
 import ru.geekbrains.android3.model.api.ApiService;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.cache.GithubCache;
-import ru.geekbrains.android3.model.repo.cache.UseCache;
 import ru.geekbrains.android3.model.utils.NetworkStatus;
 import timber.log.Timber;
 

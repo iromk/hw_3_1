@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.realm.Realm;
 import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.entity.realm.RealmRepository;
 import ru.geekbrains.android3.model.entity.realm.RealmUser;
-import ru.geekbrains.android3.model.repo.cache.image.ImageCache;
 import timber.log.Timber;
 
 /**
