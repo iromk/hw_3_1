@@ -67,7 +67,7 @@ public class MainPresenter extends MvpPresenter<MainView>
                     getViewState().showError("Network problem and cache missed requested data while getting user.");
                     Timber.e(throwable, "Failed to get user");});
     }
-
+/*
     private void getDataViaOkHttp()
     {
         Single<String> single = Single.fromCallable(() -> {
@@ -83,7 +83,7 @@ public class MainPresenter extends MvpPresenter<MainView>
                 .subscribe(s -> Timber.d(s));
 
     }
-
+*/
     public ReposPresenter getReposPresenter() {
         return reposPresenter;
     }
