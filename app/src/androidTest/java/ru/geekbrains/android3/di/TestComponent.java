@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.geekbrains.android3.GithubRepoInstrumentedTest;
+import ru.geekbrains.android3.RepoCacheInstrumentedTest;
 import ru.geekbrains.android3.di.modules.RepoModule;
 
 /**
@@ -14,5 +15,6 @@ import ru.geekbrains.android3.di.modules.RepoModule;
 public interface TestComponent {
 
     void inject(GithubRepoInstrumentedTest test);
+    void inject(RepoCacheInstrumentedTest test);
 
 }
