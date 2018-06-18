@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,6 +16,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import ru.geekbrains.android3.di.DaggerTestComponent;
 import ru.geekbrains.android3.di.TestComponent;
 import ru.geekbrains.android3.di.modules.ApiModule;
+import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.GithubRepo;
 
@@ -76,6 +78,45 @@ public class GithubRepoInstrumentedTest {
     private MockResponse createUserResponse(String login, String avatarUrl)
     {
         String body = "{\"login\":\"" + login + "\", \"avatar_url\":\"" + avatarUrl + "\"}";
+        return new MockResponse().setBody(body);
+    }
+
+    @Test
+    public void getUserRepos()
+    {
+        GithubUser user = new GithubUser("", "", "");
+        mockWebServer.enqueue(createReposResponse());
+
+        TestObserver<List<GithubRepository>> observer = new TestObserver<>();
+        githubRepo.getGitRepos(user).subscribe(observer);
+
+        observer.awaitTerminalEvent();
+
+        observer.assertValueCount(1);
+        assertEquals(2, observer.values().get(0).size());
+        assertEquals(observer.values().get(0).get(0).getFullName(),"repo odin");
+        assertEquals(observer.values().get(0).get(0).getId(), "111");
+        assertEquals(observer.values().get(0).get(0).getName(), "repo1");
+        assertEquals(observer.values().get(0).get(1).getFullName(),"repo dva");
+        assertEquals(observer.values().get(0).get(1).getId(), "222");
+        assertEquals(observer.values().get(0).get(1).getName(), "repo2");
+    }
+
+    private MockResponse createReposResponse()
+    {
+        String body = "[" +
+                "{" +
+                "    \"id\": 111," +
+                "    \"name\": \"repo1\"," +
+                "    \"full_name\": \"repo odin\"" +
+                "}," +
+                "{" +
+                "    \"id\": 222," +
+                "    \"name\": \"repo2\"," +
+                "    \"full_name\": \"repo dva\"" +
+                "}" +
+                "]";
+
         return new MockResponse().setBody(body);
     }
 }
