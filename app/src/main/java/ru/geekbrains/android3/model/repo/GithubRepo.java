@@ -14,7 +14,7 @@ import timber.log.Timber;
 
 public class GithubRepo
 {
-    private GithubCache cache;
+    public GithubCache cache;
     private ApiService apiService;
 
     public GithubRepo(GithubCache cache, ApiService apiService) {

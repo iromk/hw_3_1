@@ -7,25 +7,19 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.verification.VerificationMode;
-
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.TestScheduler;
 import ru.geekbrains.android3.di.DaggerTestComponent;
+import ru.geekbrains.android3.di.TestComponent;
 import ru.geekbrains.android3.di.modules.TestGithubRepoModule;
-import ru.geekbrains.android3.model.entity.GithubRepository;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.GithubRepo;
 import ru.geekbrains.android3.presenter.MainPresenter;
 import ru.geekbrains.android3.view.MainView;
-import ru.geekbrains.android3.di.TestComponent;
-import timber.log.Timber;
 
 /**
  * Created by Roman Syrchin on 6/17/18.
@@ -38,7 +32,6 @@ public class MainPresenterUnitTest {
 
     @BeforeClass
     public static void setupClass() {
-//        Timber.plant(new Timber.DebugTree());
     }
 
     @Before

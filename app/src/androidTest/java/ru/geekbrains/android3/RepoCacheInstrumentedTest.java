@@ -3,7 +3,11 @@ package ru.geekbrains.android3;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
@@ -15,6 +19,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import ru.geekbrains.android3.di.DaggerTestComponent;
 import ru.geekbrains.android3.di.TestComponent;
 import ru.geekbrains.android3.di.modules.ApiModule;
+import ru.geekbrains.android3.model.api.ApiService;
 import ru.geekbrains.android3.model.entity.GithubUser;
 import ru.geekbrains.android3.model.repo.GithubRepo;
 import ru.geekbrains.android3.model.repo.cache.AACache;
@@ -34,6 +39,9 @@ public class RepoCacheInstrumentedTest {
     @Inject @UseCache("Paper") GithubRepo githubRepoWithPaper;
     @Inject @UseCache GithubRepo githubRepoWithRealm;
     @Inject @UseCache("AA") GithubRepo githubRepoWithAA;
+//    @Mock GithubCache githubCache;
+//    @Inject ApiService apiService;
+    @Inject @UseCache("Mock") GithubRepo githubRepoWithMockedCache;
 
     @BeforeClass
     public static void setupClass() throws IOException
@@ -51,6 +59,8 @@ public class RepoCacheInstrumentedTest {
     @Before
     public void setup()
     {
+//        MockitoAnnotations.initMocks(this);
+
         TestComponent component = DaggerTestComponent
                 .builder()
                 .apiModule(new ApiModule()
@@ -60,20 +70,35 @@ public class RepoCacheInstrumentedTest {
                     {
                         return mockWebServer.url("/").toString();
                     }
-                }).build();
+                })
+                .build();
 
         component.inject(this);
     }
 
+    @Test @Ignore
+    public void githubRepoKeepsInCache() {
+        final GithubUser user = new GithubUser("mocking", "bird", "the");
+        mockWebServer.enqueue(createUserResponse(user.getLogin(), user.getAvatarUrl()));
+        TestObserver<GithubUser> observer = new TestObserver<>();
+        githubRepoWithMockedCache.getUser(user.getLogin()).subscribe(observer);
+        observer.awaitTerminalEvent();
+
+        Mockito.verify(githubRepoWithMockedCache.cache).keep(user);
+    }
+
     @Test
-    public void getCachedUserFromPaper()
+    public void cacheUserAndFetchFromPaper()
     {
         final GithubUser user = new GithubUser("somelogin", "someurl", "reposurl");
 
-        mockSuccessGithubUserResponse(user);
+        mockWebServer.enqueue(createUserResponse(user.getLogin(), user.getAvatarUrl()));
+        TestObserver<GithubUser> observer = new TestObserver<>();
+        githubRepoWithPaper.getUser(user.getLogin()).subscribe(observer);
+        observer.awaitTerminalEvent();
+        GithubCache cache = new PaperCache();
 
         TestObserver<GithubUser> cacheObserver = new TestObserver<>();
-        GithubCache cache = new PaperCache();
         cache.fetchUser(user.getLogin()).subscribe(cacheObserver);
         cacheObserver.awaitTerminalEvent();
         assertEquals(cacheObserver.values().get(0).getLogin(), user.getLogin());
@@ -81,40 +106,37 @@ public class RepoCacheInstrumentedTest {
     }
 
     @Test
-    public void getCachedUserFromRealm()
+    public void keepAndFetchFromRealmWorks()
     {
         final GithubUser user = new GithubUser("someloginRealm", "someurlRealm", "reposurl");
 
-        mockSuccessGithubUserResponse(user);
+        GithubCache cache = new RealmCache();
+        cache.keep(user);
 
         TestObserver<GithubUser> cacheObserver = new TestObserver<>();
-        GithubCache cache = new RealmCache();
         cache.fetchUser(user.getLogin()).subscribe(cacheObserver);
         cacheObserver.awaitTerminalEvent();
+
         assertEquals(cacheObserver.values().get(0).getLogin(), user.getLogin());
         assertEquals(cacheObserver.values().get(0).getAvatarUrl(), user.getAvatarUrl());
     }
 
     @Test
-    public void getCachedUserFromAA()
+    public void cacheUserAndFetchFromAA()
     {
         final GithubUser user = new GithubUser("someloginAA", "someurlAA", "reposurl");
-
-        mockSuccessGithubUserResponse(user);
-
-        TestObserver<GithubUser> cacheObserver = new TestObserver<>();
-        GithubCache cache = new AACache();
-        cache.fetchUser(user.getLogin()).subscribe(cacheObserver);
-        cacheObserver.awaitTerminalEvent();
-        assertEquals(cacheObserver.values().get(0).getLogin(), user.getLogin());
-        assertEquals(cacheObserver.values().get(0).getAvatarUrl(), user.getAvatarUrl());
-    }
-
-    private void mockSuccessGithubUserResponse(GithubUser user) {
         mockWebServer.enqueue(createUserResponse(user.getLogin(), user.getAvatarUrl()));
         TestObserver<GithubUser> observer = new TestObserver<>();
         githubRepoWithAA.getUser(user.getLogin()).subscribe(observer);
         observer.awaitTerminalEvent();
+
+        GithubCache cache = new AACache();
+
+        TestObserver<GithubUser> cacheObserver = new TestObserver<>();
+        cache.fetchUser(user.getLogin()).subscribe(cacheObserver);
+        cacheObserver.awaitTerminalEvent();
+        assertEquals(cacheObserver.values().get(0).getLogin(), user.getLogin());
+        assertEquals(cacheObserver.values().get(0).getAvatarUrl(), user.getAvatarUrl());
     }
 
     private MockResponse createUserResponse(String login, String avatarUrl)
